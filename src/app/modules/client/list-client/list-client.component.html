@@ -1,0 +1,18 @@
+<div class="container fondo">
+    <h1 class="text-center colorLetter">Listado de Usuarios</h1>
+    <app-tables
+    (valueResponse)="processActions($event)"
+    (valuePagination)="pageChangeEvent($event)"
+    [displayedColumns]="columsProps"
+    [dataSource]="dataSource"
+    [pageIndex]="pageIndex"
+    [pageSize]="pageSize"
+    [length]="length"
+    [cargando]="cargando"
+    [actions]="actionProps"></app-tables>
+
+<button type="button" (click)="aditionClient()" class="btn btn-primary m-4">
+  Adicionar Cliente
+</button>
+</div>
+

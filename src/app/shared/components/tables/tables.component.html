@@ -1,0 +1,58 @@
+<div class="mat-elevation-z8 mt-4 p-4">
+  <mat-spinner class="spinner" *ngIf="cargando"></mat-spinner>
+  <mat-form-field appearance="outline">
+    <mat-icon matSuffix>search</mat-icon>
+    <mat-label>Buscar</mat-label>
+
+    <input
+      matInput
+      (keyup)="applyFilter($event)"
+      placeholder="Buscar..."
+      #input />
+  </mat-form-field>
+
+  <div class="table-responsive">
+    <table
+      mat-table
+      class="table table-scroll table-striped"
+      [dataSource]="dataSource">
+      <ng-container
+        [matColumnDef]="column.head"
+        *ngFor="let column of displayedColumns">
+        <th mat-header-cell *matHeaderCellDef>
+          {{ column.head | uppercase }}
+        </th>
+        <td mat-cell *matCellDef="let element" class="text-center">
+          <ng-container *ngIf="column.head === 'acciones'">
+            <ng-container *ngFor="let action of actions">
+              <i
+                [ngClass]="action.style"
+                (click)="clickAction(action.name, element[column.data])">
+              </i>
+            </ng-container>
+          </ng-container>
+
+          <ng-container *ngIf="column.head !== 'acciones'">
+            {{ element[column.data] }}
+          </ng-container>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsTemporal"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumnsTemporal"></tr>
+    </table>
+  </div>
+
+  <div>
+    <mat-paginator
+      class="p-0 m-0"
+      [pageSizeOptions]="[5, 10, 20]"
+      showFirstLastButtons
+      aria-label="Select page of periodic elements"
+      [pageIndex]="pageIndex"
+      [pageSize]="pageSize"
+      [length]="length"
+      (page)="clickPagination($event)">
+    </mat-paginator>
+  </div>
+</div>

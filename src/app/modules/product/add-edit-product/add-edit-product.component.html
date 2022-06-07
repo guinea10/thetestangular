@@ -1,0 +1,58 @@
+<div>
+  <div class="modal-header">
+    <h4 class="modal-title colorLetter">{{ portada }}</h4>
+  </div>
+  <div class="modal-body">
+    <form
+      *ngIf="formGroup"
+      [formGroup]="formGroup"
+      novalidate
+      class="form-container">
+      <div class="row">
+        <div class="form-group col-md-12">
+          <label>Nombre</label>
+          <input
+            type="text"
+            formControlName="nombre"
+            autocomplete="off"
+            title="Nombre"
+            class="form-control"
+            maxlength="20"
+            [ngClass]="{
+              'is-invalid':
+                f.nombre.invalid && (f.nombre.dirty || f.nombre.touched)
+            }" />
+
+          <small class="text-mutted"> El nombre no puede quedar vacío. </small>
+        </div>
+        <div class="form-group col-md-12">
+          <label maxlength="20">Precio</label>
+          <input
+            type="text"
+            formControlName="precio"
+            autocomplete="off"
+            title="Precio"
+            class="form-control"
+            maxlength="20"
+            [ngClass]="{
+              'is-invalid':
+                f.precio.invalid && (f.precio.dirty || f.precio.touched)
+            }" />
+
+          <small class="text-mutted"> El precio acepta solo numeros. </small>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer" *ngIf="formGroup">
+    <button
+      class="btn btn-success"
+      (click)="save()"
+      [disabled]="formGroup.invalid">
+      Guardar
+    </button>
+    <button class="btn btn-danger" type="button" (click)="close()">
+      Cancelar
+    </button>
+  </div>
+</div>

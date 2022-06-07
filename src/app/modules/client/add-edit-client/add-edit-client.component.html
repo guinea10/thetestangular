@@ -1,0 +1,104 @@
+<div class="modal-header">
+  <h4 class="modal-title colorLetter">{{ portada }}</h4>
+</div>
+<div class="modal-body">
+  <form
+    *ngIf="formGroup"
+    [formGroup]="formGroup"
+    novalidate
+    class="form-container">
+    <div class="row">
+      <div class="form-group col-md-12">
+        <label>Nombre</label>
+        <input
+          type="text"
+          formControlName="nombre"
+          autocomplete="off"
+          title="Nombre"
+          class="form-control"
+          maxlength="20"
+          [ngClass]="{
+            'is-invalid':
+              f.nombre.invalid && (f.nombre.dirty || f.nombre.touched)
+          }" />
+
+        <small class="text-mutted"> El precio no puede quedar vacío. </small>
+      </div>
+      <div class="form-group col-md-12">
+        <label>Apellido</label>
+        <input
+          type="text"
+          formControlName="apellido"
+          autocomplete="off"
+          title="Apellido"
+          class="form-control"
+          maxlength="20"
+          [ngClass]="{
+            'is-invalid':
+              f.apellido.invalid && (f.apellido.dirty || f.apellido.touched)
+          }" />
+
+        <small class="text-mutted"> El apellido no puede quedar vacío. </small>
+      </div>
+      <div class="form-group col-md-12">
+        <label maxlength="20">DNI</label>
+        <input
+          type="text"
+          formControlName="dni"
+          autocomplete="off"
+          title="DNI"
+          class="form-control"
+          maxlength="20"
+          [ngClass]="{
+            'is-invalid': f.dni.invalid && (f.dni.dirty || f.dni.touched)
+          }" />
+
+        <small class="text-mutted"> El DNI acepta solo numeros enteros. </small>
+      </div>
+      <div class="form-group col-md-12">
+        <label>Telefono</label>
+        <input
+          type="text"
+          formControlName="telefono"
+          autocomplete="off"
+          title="Telefono"
+          class="form-control"
+          maxlength="20"
+          [ngClass]="{
+            'is-invalid':
+              f.telefono.invalid && (f.telefono.dirty || f.telefono.touched)
+          }" />
+
+        <small class="text-mutted">
+          El Telefono acepta solo numeros enteros.
+        </small>
+      </div>
+      <div class="form-group col-md-12">
+        <label>Email</label>
+        <input
+          type="text"
+          formControlName="email"
+          autocomplete="off"
+          title="Email"
+          class="form-control"
+          maxlength="20"
+          [ngClass]="{
+            'is-invalid': f.email.invalid && (f.email.dirty || f.email.touched)
+          }" />
+
+        <small class="text-mutted"> El Email debe ser valido. </small>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer" *ngIf="formGroup">
+  <button
+    class="btn btn-primary"
+    (click)="save()"
+    [disabled]="formGroup.invalid">
+    Guardar
+  </button>
+  <button class="btn btn-danger" type="button" (click)="close()">
+    Cancelar
+  </button>
+</div>
