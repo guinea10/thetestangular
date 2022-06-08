@@ -71,12 +71,18 @@ export class AddEditProductComponent implements OnInit, OnDestroy {
           .getProduct()
           .pipe(
             switchMap((values: Product[]) => {
-              const maxIndex = !!values.length
+              /*const maxIndex = !!values.length
                 ? Math.max(...values.map((user: Product) => user.idProducto)) +
                   1
                 : 1;
               valuesForm.id = maxIndex;
-              valuesForm.idProducto = maxIndex;
+              valuesForm.idProducto = maxIndex;*/
+              const onlyIndexs = values.map(
+                (product: Product) => product.idProducto
+              );
+              const maxIndex = onlyIndexs.reduce((a, b) => Math.max(a, b), 0);
+              valuesForm.id = maxIndex + 1;
+              valuesForm.idProducto = maxIndex + 1;
               return this.productService.postProduct(valuesForm).pipe(
                 map(() => this.dialogRef.close('editar')),
                 catchError(() => {

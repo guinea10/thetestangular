@@ -106,7 +106,7 @@
       "id": 1,
       "idProducto": 1,
       "nombre": "Arroz con gris",
-      "precio": 10
+      "precio": "5"
     },
     {
       "id": 2,
@@ -131,6 +131,12 @@
       "nombre": "granada",
       "precio": "71",
       "id": 5
+    },
+    {
+      "idProducto": 6,
+      "nombre": "papas fritas",
+      "precio": "78",
+      "id": 6
     }
   ]
 }
