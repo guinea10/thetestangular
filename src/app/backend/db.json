@@ -1,0 +1,114 @@
+{
+  "users": [
+    {
+      "idCliente": "1",
+      "nombre": "sdsd",
+      "apellido": "sds",
+      "dni": "2",
+      "telefono": "5",
+      "email": "sds@fdfdfd",
+      "id": 1
+    },
+    {
+      "idCliente": 2,
+      "nombre": "sds",
+      "apellido": "sds",
+      "dni": "2",
+      "telefono": "4",
+      "email": "asa@dffdf",
+      "id": 2
+    },
+    {
+      "idCliente": 3,
+      "nombre": "ere",
+      "apellido": "sdsd",
+      "dni": "224",
+      "telefono": "323",
+      "email": "dds@fdfd",
+      "id": 3
+    },
+    {
+      "idCliente": 4,
+      "nombre": "sds",
+      "apellido": "2323",
+      "dni": "432434",
+      "telefono": "533",
+      "email": "dfdf@dffd",
+      "id": 4
+    },
+    {
+      "idCliente": 5,
+      "nombre": "erer",
+      "apellido": "dfd66",
+      "dni": "66",
+      "telefono": "66",
+      "email": "fdf@dsfds",
+      "id": 5
+    },
+    {
+      "idCliente": 6,
+      "nombre": "dfdf",
+      "apellido": "dfdf",
+      "dni": "878",
+      "telefono": "87",
+      "email": "dfd@gfgfg",
+      "id": 6
+    },
+    {
+      "idCliente": 7,
+      "nombre": "fgfg",
+      "apellido": "fgfg",
+      "dni": "655",
+      "telefono": "565",
+      "email": "fdffd@dfdf",
+      "id": 7
+    }
+  ],
+  "sale": [
+    {
+      "idVenta": 1,
+      "idCliente": {
+        "idCliente": 1,
+        "nombre": "Juan",
+        "apellido": "Francisco",
+        "dni": 91040407803,
+        "telefono": 78958989,
+        "email": "clienta@gmail.com"
+      },
+      "nombreCliente": "Juan",
+      "fecha": "2021-08-10"
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "idProducto": 1,
+      "nombre": "Arroz con gris",
+      "precio": 10
+    },
+    {
+      "id": 2,
+      "idProducto": 2,
+      "nombre": "Frijoles",
+      "precio": 20
+    },
+    {
+      "id": 3,
+      "idProducto": 3,
+      "nombre": "Mantequilla",
+      "precio": 20
+    },
+    {
+      "id": 4,
+      "idProducto": 4,
+      "nombre": "Boniato",
+      "precio": 10.5
+    },
+    {
+      "idProducto": 5,
+      "nombre": "granada",
+      "precio": "71",
+      "id": 5
+    }
+  ]
+}

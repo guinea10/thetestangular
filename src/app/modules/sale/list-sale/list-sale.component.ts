@@ -1,7 +1,10 @@
 import { ValueConverter } from '@angular/compiler/src/render3/view/template';
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
+import { of, Subscription } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { Sale } from 'src/app/shared/models/sale';
+import { SaleService } from '../services/sale.service';
 
 @Component({
   selector: 'app-list-sale',
@@ -9,26 +12,12 @@ import { Sale } from 'src/app/shared/models/sale';
   styleUrls: ['./list-sale.component.scss']
 })
 export class ListSaleComponent implements OnInit {
-  cargando = false;
+  subcription: Subscription = new Subscription();
+  loading = false;
   dataSource = new MatTableDataSource();
   pageIndex = 0;
   pageSize = 5;
   length = 0;
-  sale: Sale[] = [
-    {
-      idVenta: 1,
-      idCliente: {
-        idCliente: 1,
-        nombre: 'Juan',
-        apellido: 'Francisco',
-        dni: 91040407803,
-        telefono: '78958989',
-        email: 'clienta@gmail.com'
-      },
-      nombreCliente: 'Juan',
-      fecha: '2021-08-10'
-    }
-  ];
   columsProps: {head: string, data: string}[] = [
     {
       head: 'ID',
@@ -44,15 +33,26 @@ export class ListSaleComponent implements OnInit {
     },
   ];
 
-  constructor() { }
+  constructor(private saleService: SaleService) { }
 
   ngOnInit() {
     this.loadData();
   }
-
+  
   loadData() {
-    this.dataSource.data = this.sale;
-    this.length = this.length;
+    this.loading = true;
+    const sub$ = this.saleService.getSale().pipe(
+      map((sale: Sale[]) => {
+        this.dataSource.data = sale;
+        this.length = sale.length;
+        this.loading = false;
+      }),
+      catchError(() => {
+        this.loading = false;
+        return of(null);
+      })
+    ).subscribe();
+    this.subcription.add(sub$);
   }
 
   pageChangeEvent(event: any) {

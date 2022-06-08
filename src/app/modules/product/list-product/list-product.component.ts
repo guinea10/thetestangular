@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatTableDataSource } from '@angular/material';
 import { of, Subscription } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { Product } from 'src/app/shared/models/product';
 import { AddEditProductComponent } from '../add-edit-product/add-edit-product.component';
+import { ProductService } from '../services/product.service';
 
 @Component({
   selector: 'app-list-product',
@@ -12,19 +13,12 @@ import { AddEditProductComponent } from '../add-edit-product/add-edit-product.co
 })
 export class ListProductComponent implements OnInit {
   subcription: Subscription = new Subscription();
-  cargando = false;
+  loading = false;
   dataSource = new MatTableDataSource();
   pageIndex = 0;
   pageSize = 5;
   length = 0;
 
-  products: Product[] = [
-    {
-      idProducto: 1,
-      nombre: 'Arroz',
-      precio: 10.20
-    }
-  ];
   columsProps: {head: string, data: string}[] = [
     {
       head: 'ID',
@@ -49,7 +43,7 @@ export class ListProductComponent implements OnInit {
     { name: 'Eliminar', style: 'fa fa-trash-o fa-lg text-danger p-1' },
   ];
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog, private productService: ProductService) { }
 
   ngOnInit() {
     this.loadData();
@@ -62,73 +56,87 @@ export class ListProductComponent implements OnInit {
   processActions(event: { actions: string, id: number }) {
     const { actions, id } = event;
     if (actions === 'Editar') {
-      const index = this.products.findIndex((values: Product) => values.idProducto === id);
-      const data = this.products[index];
-      const sub$ = this.dialog
-        .open(AddEditProductComponent, {
-          width: '80vw',
-          height:'80vh',
-          maxWidth: '100vw',
-          maxHeight: '100vh',
-          disableClose: true,
-          autoFocus: true,
-          panelClass: 'window',
-          data,
-        })
-        .afterClosed()
+      const sub$ = this.productService
+        .getProductByID(id)
         .pipe(
-          map((value: Product | undefined) => {
-            if (!!value) {
-              const indexAgain = this.products.findIndex((values: Product) => values.idProducto === id);
-              this.products[indexAgain] = value;
-              this.loadData();
-            }
-          }),
+          switchMap((data: Product) =>
+            this.dialog
+              .open(AddEditProductComponent, {
+                width: '80vw',
+                height: '95vh',
+                maxWidth: '100vw',
+                maxHeight: '100vh',
+                disableClose: true,
+                autoFocus: true,
+                data,
+              })
+              .afterClosed()
+              .pipe(
+                map((value: string | undefined) => {
+                  if (!!value) {   
+                    this.loadData();
+                  }
+                }),
+                catchError(() => {
+                  return of(null);
+                })
+              )
+          ),
           catchError(() => {
             return of(null);
           })
         )
         .subscribe();
+
       this.subcription.add(sub$);
     }
     if (actions === 'Eliminar') {
-        this.products = this.products.filter((values: Product) => values.idProducto !== id);
-        this.loadData();
+      const sub$ = this.productService
+      .deleteProduct(id)
+      .pipe(map(() => this.loadData()))
+      .subscribe();
+    this.subcription.add(sub$);
     }
   }
 
   aditionProduct() {
     const sub$ = this.dialog
-        .open(AddEditProductComponent, {
-          width: '80vw',
-          height:'80vh',
-          maxWidth: '100vw',
-          maxHeight: '100vh',
-          disableClose: true,
-          autoFocus: true,
-          data: null,
+      .open(AddEditProductComponent, {
+        width: '80vw',
+        height: '95vh',
+        maxWidth: '100vw',
+        maxHeight: '100vh',
+        disableClose: true,
+        data: null,
+      })
+      .afterClosed()
+      .pipe(
+        map((value: string | undefined) => {
+          if (!!value) {   
+            this.loadData();
+          }
+        }),
+        catchError(() => {
+          return of(null);
         })
-        .afterClosed()
-        .pipe(
-          map((value: Product | undefined) => {
-            if (!!value) {
-              const dataSend = value;
-              dataSend.idProducto = this.products.length + 1;
-              this.products.push(dataSend);
-              this.loadData();
-            }
-          }),
-          catchError(() => {
-            return of(null);
-          })
-        )
-        .subscribe();
+      )
+      .subscribe();
     this.subcription.add(sub$);
   }
-
   loadData() {
-    this.dataSource.data = this.products;
-    this.length = this.products.length;
+    this.loading = true;
+    const sub$ = this.productService.getProduct().pipe(
+      map((product: Product[]) => {
+        this.dataSource.data = product;
+        this.length = product.length;
+        this.loading = false;
+      }),
+      catchError(() => {
+        this.loading = false;
+        return of(null);
+      })
+    ).subscribe();
+    this.subcription.add(sub$);
   }
 
   pageChangeEvent(event: any) {

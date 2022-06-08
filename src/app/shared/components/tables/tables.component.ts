@@ -16,7 +16,7 @@ export class TablesComponent implements OnInit {
   @Input() pageIndex!: number;
   @Input() pageSize!: number;
   @Input() length!: number;
-  @Input() cargando!: boolean;
+  @Input() loading!: boolean;
   @Input() dataSource!: any;
   @Input() actions!: any[];
 

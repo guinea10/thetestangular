@@ -1,15 +1,19 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { of, Subscription } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { Validation } from 'src/app/shared/helper/validation/validation';
 import { Product } from 'src/app/shared/models/product';
+import { ProductService } from '../services/product.service';
 
 @Component({
   selector: 'app-add-edit-product',
   templateUrl: './add-edit-product.component.html',
   styleUrls: ['./add-edit-product.component.scss']
 })
-export class AddEditProductComponent implements OnInit {
+export class AddEditProductComponent implements OnInit, OnDestroy {
+  subcription: Subscription = new Subscription();
   values: Product | null = null;
   portada = 'Adicionar Producto';
   formGroup!: FormGroup;
@@ -17,13 +21,18 @@ export class AddEditProductComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<AddEditProductComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Product | null,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private productService: ProductService
   ) {
     this.values = data;
   }
 
   ngOnInit() {
     this.createForm();
+  }
+
+  ngOnDestroy(): void {
+   this.subcription.unsubscribe(); 
   }
 
   createForm() {
@@ -45,9 +54,36 @@ export class AddEditProductComponent implements OnInit {
     const valuesForm = this.formGroup.value;
     if (this.formGroup.errors === null) {
       if (!!this.values) {
-        this.dialogRef.close(valuesForm);
+        const sub$ = this.productService
+          .updateProduct(valuesForm)
+          .pipe(
+            map(() => this.dialogRef.close('adicionar')),
+            catchError(() => {
+              return of(null);
+            })
+          )
+          .subscribe();
+        this.subcription.add(sub$);
       } else {
-        this.dialogRef.close(valuesForm);
+        const sub$ = this.productService
+          .getProduct()
+          .pipe(
+            switchMap((values: Product[]) => {
+              valuesForm.id = values.length + 1;
+              valuesForm.idProducto = values.length + 1;
+              return this.productService.postProduct(valuesForm).pipe(
+                map(() => this.dialogRef.close('editar')),
+                catchError(() => {
+                  return of(null);
+                })
+              );
+            }),
+            catchError(() => {
+              return of(null);
+            })
+          )
+          .subscribe();
+        this.subcription.add(sub$);
       }
     }
   }

@@ -1,38 +1,25 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatTableDataSource } from '@angular/material';
-import { Store } from '@ngrx/store';
-import { Observable, of, Subscription } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { of, Subscription } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { Client } from 'src/app/shared/models/client';
-import { AppState } from 'src/app/state/app.state';
-import { selectorChangeMenu } from 'src/app/state/selectors/selector';
 import { AddEditClientComponent } from '../add-edit-client/add-edit-client.component';
+import { ClientService } from '../services/client.service';
 
 @Component({
   selector: 'app-list-client',
   templateUrl: './list-client.component.html',
-  styleUrls: ['./list-client.component.scss']
+  styleUrls: ['./list-client.component.scss'],
 })
 export class ListClientComponent implements OnInit, OnDestroy {
-  menu = true;
-  users$: Observable<any> = new Observable();
   subcription: Subscription = new Subscription();
-  cargando = false;
+  loading = false;
   dataSource = new MatTableDataSource();
   pageIndex = 0;
   pageSize = 5;
   length = 0;
-  clients: Client[] = [
-    {
-      idCliente: 1,
-      nombre: 'Juan',
-      apellido: 'Francisco',
-      dni: 74040407854,
-      telefono: '78958989',
-      email: 'clienta@gmail.com'
-    }
-  ];
-  columsProps: {head: string, data: string}[] = [
+
+  columsProps: { head: string; data: string }[] = [
     {
       head: 'ID',
       data: 'idCliente',
@@ -59,17 +46,17 @@ export class ListClientComponent implements OnInit, OnDestroy {
     },
   ];
 
-  actionProps: {name: string, style: string}[] = [
+  actionProps: { name: string; style: string }[] = [
     { name: 'Editar', style: 'fa fa-pencil fa-lg p-1 text-primary mr-2' },
     { name: 'Eliminar', style: 'fa fa-trash-o fa-lg text-danger p-1' },
   ];
 
-  constructor(private dialog: MatDialog, private store: Store<AppState>) { }
+  constructor(
+    private dialog: MatDialog,
+    private clientService: ClientService
+  ) {}
 
   ngOnInit() {
-    this.users$ = this.store.select(selectorChangeMenu);
-    this.users$.subscribe((val: boolean) => (this.menu = val));
-
     this.loadData();
   }
 
@@ -77,78 +64,85 @@ export class ListClientComponent implements OnInit, OnDestroy {
     this.subcription.unsubscribe();
   }
 
-  processActions(event: { actions: string, id: number }) {
+  processActions(event: { actions: string; id: number }) {
     const { actions, id } = event;
     if (actions === 'Editar') {
-      const index = this.clients.findIndex((values: Client) => values.idCliente === id);
-      const data = this.clients[index];
-      const sub$ = this.dialog
-        .open(AddEditClientComponent, {
-          width: '80vw',
-          height:'95vh',
-          maxWidth: '100vw',
-          maxHeight: '100vh',
-          disableClose: true,
-          autoFocus: true,
-          data,
-        })
-        .afterClosed()
+      const sub$ = this.clientService
+        .getClientByID(id)
         .pipe(
-          map((value: Client | undefined) => {
-            if (!!value) {
-              const indexAgain = this.clients.findIndex((values: Client) => values.idCliente === id);
-              this.clients[indexAgain] = value;
-              this.loadData();
-            }
-          }),
+          switchMap((data: Client) =>
+            this.dialog
+              .open(AddEditClientComponent, {
+                width: '80vw',
+                height: '95vh',
+                maxWidth: '100vw',
+                maxHeight: '100vh',
+                disableClose: true,
+                autoFocus: true,
+                data,
+              })
+              .afterClosed()
+              .pipe(
+                map(() => this.loadData()),
+                catchError(() => {
+                  return of(null);
+                })
+              )
+          ),
           catchError(() => {
             return of(null);
           })
         )
         .subscribe();
+
       this.subcription.add(sub$);
     }
     if (actions === 'Eliminar') {
-        this.clients = this.clients.filter((values: Client) => values.idCliente !== id);
-        this.loadData();
+      const sub$ = this.clientService
+        .deleteClient(id)
+        .pipe(map(() => this.loadData()))
+        .subscribe();
+      this.subcription.add(sub$);
     }
   }
 
   aditionClient() {
     const sub$ = this.dialog
-        .open(AddEditClientComponent, {
-          width: '80vw',
-          height:'95vh',
-          maxWidth: '100vw',
-          maxHeight: '100vh',
-          disableClose: true,
-          data: null
+      .open(AddEditClientComponent, {
+        width: '80vw',
+        height: '95vh',
+        maxWidth: '100vw',
+        maxHeight: '100vh',
+        disableClose: true,
+        data: null,
+      })
+      .afterClosed()
+      .pipe(
+        map(() => this.loadData()),
+        catchError(() => {
+          return of(null);
         })
-        .afterClosed()
-        .pipe(
-          map((value: Client | undefined) => {
-            if (!!value) {
-              const dataSend = value;
-              dataSend.idCliente = this.clients.length + 1;
-              this.clients.push(dataSend);
-              this.loadData();
-            }
-          }),
-          catchError(() => {
-            return of(null);
-          })
-        )
-        .subscribe();
+      )
+      .subscribe();
     this.subcription.add(sub$);
   }
 
   loadData() {
-    this.dataSource.data = this.clients;
-    this.length = this.clients.length;
-  }
-
-  pageChangeEvent(event: any) {
-    this.pageIndex = event.pageIndex;
-    this.pageSize = event.pageSize;
+    this.loading = true;
+    const sub$ = this.clientService
+      .getClient()
+      .pipe(
+        map((client: Client[]) => {
+          this.dataSource.data = client;
+          this.length = client.length;
+          this.loading = false;
+        }),
+        catchError(() => {
+            this.loading = false;
+            return of(null);
+        })
+      )
+      .subscribe();
+    this.subcription.add(sub$);
   }
 }
