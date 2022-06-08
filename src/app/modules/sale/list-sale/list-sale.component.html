@@ -1,11 +1,7 @@
 <div class="container fondo">
   <h1 class="text-center colorLetter">Listado de Ventas</h1>
   <app-tables
-    (valuePagination)="pageChangeEvent($event)"
     [displayedColumns]="columsProps"
     [dataSource]="dataSource"
-    [pageIndex]="pageIndex"
-    [pageSize]="pageSize"
-    [length]="length"
     [loading]="loading"></app-tables>
 </div>

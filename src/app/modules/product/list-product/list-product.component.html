@@ -2,12 +2,8 @@
   <h1 class="text-center colorLetter">Listado de Productos</h1>
   <app-tables
     (valueResponse)="processActions($event)"
-    (valuePagination)="pageChangeEvent($event)"
     [displayedColumns]="columsProps"
     [dataSource]="dataSource"
-    [pageIndex]="pageIndex"
-    [pageSize]="pageSize"
-    [length]="length"
     [loading]="loading"
     [actions]="actionProps"></app-tables>
 

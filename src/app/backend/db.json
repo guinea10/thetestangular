@@ -37,15 +37,6 @@
       "id": 4
     },
     {
-      "idCliente": 5,
-      "nombre": "erer",
-      "apellido": "dfd66",
-      "dni": "66",
-      "telefono": "66",
-      "email": "fdf@dsfds",
-      "id": 5
-    },
-    {
       "idCliente": 6,
       "nombre": "dfdf",
       "apellido": "dfdf",
@@ -62,6 +53,24 @@
       "telefono": "565",
       "email": "fdffd@dfdf",
       "id": 7
+    },
+    {
+      "idCliente": 8,
+      "nombre": "343",
+      "apellido": "ewew",
+      "dni": "33",
+      "telefono": "333",
+      "email": "fina@sfdddf",
+      "id": 8
+    },
+    {
+      "idCliente": 9,
+      "nombre": "pepe",
+      "apellido": "pepe",
+      "dni": "1234",
+      "telefono": "5678",
+      "email": "abc@def",
+      "id": 9
     }
   ],
   "sale": [
@@ -71,12 +80,25 @@
         "idCliente": 1,
         "nombre": "Juan",
         "apellido": "Francisco",
-        "dni": 91040407803,
+        "dni": 91090907815,
         "telefono": 78958989,
         "email": "clienta@gmail.com"
       },
       "nombreCliente": "Juan",
       "fecha": "2021-08-10"
+    },
+    {
+      "idVenta": 2,
+      "idCliente": {
+        "idCliente": 1,
+        "nombre": "Ariel",
+        "apellido": "Garcia",
+        "dni": 96040908963,
+        "telefono": 78958989,
+        "email": "ariel@gmail.com"
+      },
+      "nombreCliente": "Ariel",
+      "fecha": "2022-04-10"
     }
   ],
   "products": [

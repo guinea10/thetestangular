@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -8,14 +15,10 @@ import { Observable } from 'rxjs';
   templateUrl: './tables.component.html',
   styleUrls: ['./tables.component.scss'],
 })
-export class TablesComponent implements OnInit {
+export class TablesComponent implements OnInit, AfterViewInit {
   @Output() valueResponse: EventEmitter<any> = new EventEmitter();
-  @Output() valuePagination: EventEmitter<any> = new EventEmitter();
   arrayCheckbox: any[] = [];
   @Input() displayedColumns!: any[];
-  @Input() pageIndex!: number;
-  @Input() pageSize!: number;
-  @Input() length!: number;
   @Input() loading!: boolean;
   @Input() dataSource!: any;
   @Input() actions!: any[];
@@ -31,6 +34,10 @@ export class TablesComponent implements OnInit {
     this.displayedColumnsTemporal = this.displayedColumns.map(col => col.head);
   }
 
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -38,10 +45,5 @@ export class TablesComponent implements OnInit {
 
   clickAction(value: any, id: number) {
     this.valueResponse.emit({ actions: value, id });
-  }
-
-  clickPagination(value: any) {
-    const { pageIndex, pageSize } = value;
-    this.valuePagination.emit({ pageIndex, pageSize });
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatTableDataSource } from '@angular/material';
 import { of, Subscription } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
@@ -11,13 +11,10 @@ import { ProductService } from '../services/product.service';
   templateUrl: './list-product.component.html',
   styleUrls: ['./list-product.component.scss'],
 })
-export class ListProductComponent implements OnInit {
+export class ListProductComponent implements OnInit, OnDestroy {
   subcription: Subscription = new Subscription();
   loading = false;
   dataSource = new MatTableDataSource();
-  pageIndex = 0;
-  pageSize = 5;
-  length = 0;
 
   columsProps: { head: string; data: string }[] = [
     {
@@ -126,6 +123,7 @@ export class ListProductComponent implements OnInit {
       .subscribe();
     this.subcription.add(sub$);
   }
+
   loadData() {
     this.loading = true;
     const sub$ = this.productService
@@ -133,7 +131,6 @@ export class ListProductComponent implements OnInit {
       .pipe(
         map((product: Product[]) => {
           this.dataSource.data = product;
-          this.length = product.length;
           this.loading = false;
         }),
         catchError(() => {
@@ -143,10 +140,5 @@ export class ListProductComponent implements OnInit {
       )
       .subscribe();
     this.subcription.add(sub$);
-  }
-
-  pageChangeEvent(event: any) {
-    this.pageIndex = event.pageIndex;
-    this.pageSize = event.pageSize;
   }
 }

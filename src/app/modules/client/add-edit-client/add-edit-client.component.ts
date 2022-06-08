@@ -75,8 +75,11 @@ export class AddEditClientComponent implements OnInit {
           .getClient()
           .pipe(
             switchMap((values: Client[]) => {
-              valuesForm.id = values.length + 1;
-              valuesForm.idCliente = values.length + 1;
+              const maxIndex = !!values.length
+                ? Math.max(...values.map((user: Client) => user.idCliente)) + 1
+                : 1;
+              valuesForm.id = maxIndex;
+              valuesForm.idCliente = maxIndex;
               return this.clientService.postClient(valuesForm).pipe(
                 map(() => this.dialogRef.close('editar')),
                 catchError(() => {

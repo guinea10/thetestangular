@@ -15,9 +15,6 @@ export class ListClientComponent implements OnInit, OnDestroy {
   subcription: Subscription = new Subscription();
   loading = false;
   dataSource = new MatTableDataSource();
-  pageIndex = 0;
-  pageSize = 5;
-  length = 0;
 
   columsProps: { head: string; data: string }[] = [
     {
@@ -134,7 +131,6 @@ export class ListClientComponent implements OnInit, OnDestroy {
       .pipe(
         map((client: Client[]) => {
           this.dataSource.data = client;
-          this.length = client.length;
           this.loading = false;
         }),
         catchError(() => {

@@ -15,9 +15,7 @@ export class ListSaleComponent implements OnInit {
   subcription: Subscription = new Subscription();
   loading = false;
   dataSource = new MatTableDataSource();
-  pageIndex = 0;
-  pageSize = 5;
-  length = 0;
+
   columsProps: { head: string; data: string }[] = [
     {
       head: 'ID',
@@ -46,7 +44,6 @@ export class ListSaleComponent implements OnInit {
       .pipe(
         map((sale: Sale[]) => {
           this.dataSource.data = sale;
-          this.length = sale.length;
           this.loading = false;
         }),
         catchError(() => {
@@ -56,10 +53,5 @@ export class ListSaleComponent implements OnInit {
       )
       .subscribe();
     this.subcription.add(sub$);
-  }
-
-  pageChangeEvent(event: any) {
-    this.pageIndex = event.pageIndex;
-    this.pageSize = event.pageSize;
   }
 }
