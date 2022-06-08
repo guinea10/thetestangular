@@ -9,7 +9,7 @@ import { ProductService } from '../services/product.service';
 @Component({
   selector: 'app-list-product',
   templateUrl: './list-product.component.html',
-  styleUrls: ['./list-product.component.scss']
+  styleUrls: ['./list-product.component.scss'],
 })
 export class ListProductComponent implements OnInit {
   subcription: Subscription = new Subscription();
@@ -19,7 +19,7 @@ export class ListProductComponent implements OnInit {
   pageSize = 5;
   length = 0;
 
-  columsProps: {head: string, data: string}[] = [
+  columsProps: { head: string; data: string }[] = [
     {
       head: 'ID',
       data: 'idProducto',
@@ -38,12 +38,15 @@ export class ListProductComponent implements OnInit {
     },
   ];
 
-  actionProps: {name: string, style: string}[] = [
+  actionProps: { name: string; style: string }[] = [
     { name: 'Editar', style: 'fa fa-pencil fa-lg p-1 text-primary mr-2' },
     { name: 'Eliminar', style: 'fa fa-trash-o fa-lg text-danger p-1' },
   ];
 
-  constructor(private dialog: MatDialog, private productService: ProductService) { }
+  constructor(
+    private dialog: MatDialog,
+    private productService: ProductService
+  ) {}
 
   ngOnInit() {
     this.loadData();
@@ -53,7 +56,7 @@ export class ListProductComponent implements OnInit {
     this.subcription.unsubscribe();
   }
 
-  processActions(event: { actions: string, id: number }) {
+  processActions(event: { actions: string; id: number }) {
     const { actions, id } = event;
     if (actions === 'Editar') {
       const sub$ = this.productService
@@ -73,7 +76,7 @@ export class ListProductComponent implements OnInit {
               .afterClosed()
               .pipe(
                 map((value: string | undefined) => {
-                  if (!!value) {   
+                  if (!!value) {
                     this.loadData();
                   }
                 }),
@@ -92,10 +95,10 @@ export class ListProductComponent implements OnInit {
     }
     if (actions === 'Eliminar') {
       const sub$ = this.productService
-      .deleteProduct(id)
-      .pipe(map(() => this.loadData()))
-      .subscribe();
-    this.subcription.add(sub$);
+        .deleteProduct(id)
+        .pipe(map(() => this.loadData()))
+        .subscribe();
+      this.subcription.add(sub$);
     }
   }
 
@@ -112,7 +115,7 @@ export class ListProductComponent implements OnInit {
       .afterClosed()
       .pipe(
         map((value: string | undefined) => {
-          if (!!value) {   
+          if (!!value) {
             this.loadData();
           }
         }),
@@ -125,17 +128,20 @@ export class ListProductComponent implements OnInit {
   }
   loadData() {
     this.loading = true;
-    const sub$ = this.productService.getProduct().pipe(
-      map((product: Product[]) => {
-        this.dataSource.data = product;
-        this.length = product.length;
-        this.loading = false;
-      }),
-      catchError(() => {
-        this.loading = false;
-        return of(null);
-      })
-    ).subscribe();
+    const sub$ = this.productService
+      .getProduct()
+      .pipe(
+        map((product: Product[]) => {
+          this.dataSource.data = product;
+          this.length = product.length;
+          this.loading = false;
+        }),
+        catchError(() => {
+          this.loading = false;
+          return of(null);
+        })
+      )
+      .subscribe();
     this.subcription.add(sub$);
   }
 

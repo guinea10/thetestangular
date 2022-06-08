@@ -138,8 +138,8 @@ export class ListClientComponent implements OnInit, OnDestroy {
           this.loading = false;
         }),
         catchError(() => {
-            this.loading = false;
-            return of(null);
+          this.loading = false;
+          return of(null);
         })
       )
       .subscribe();

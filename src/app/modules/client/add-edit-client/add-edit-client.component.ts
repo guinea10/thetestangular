@@ -39,9 +39,7 @@ export class AddEditClientComponent implements OnInit {
     this.portada = !!this.values ? 'Editar Cliente' : 'Adicionar Cliente';
     if (!!this.values) this.edit = true;
     this.formGroup = this.formBuilder.group({
-      idCliente: [
-        this.values ? this.values.idCliente : ''
-      ],
+      idCliente: [this.values ? this.values.idCliente : ''],
       nombre: [this.values ? this.values.nombre : '', Validators.required],
       apellido: [this.values ? this.values.apellido : '', Validators.required],
       dni: [

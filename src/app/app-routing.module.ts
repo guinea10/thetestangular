@@ -8,7 +8,6 @@ import { SidebarComponent } from './shared/components/sidebar/sidebar.component'
 import { AdminGuard } from './shared/guards/admin/admin.guard';
 import { ClientGuard } from './shared/guards/client/client.guard';
 
-
 const routes: Routes = [
   { path: '', component: LoginComponent },
   {
@@ -23,12 +22,12 @@ const routes: Routes = [
       {
         path: 'users',
         component: ListClientComponent,
-        canActivate: [AdminGuard]
+        canActivate: [AdminGuard],
       },
       {
         path: 'products',
         component: ListProductComponent,
-        canActivate: [AdminGuard]
+        canActivate: [AdminGuard],
       },
     ],
   },
@@ -44,18 +43,18 @@ const routes: Routes = [
       {
         path: 'sale',
         component: ListSaleComponent,
-        canActivate: [ClientGuard]
+        canActivate: [ClientGuard],
       },
     ],
   },
   {
     path: '**',
-    component: LoginComponent
+    component: LoginComponent,
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

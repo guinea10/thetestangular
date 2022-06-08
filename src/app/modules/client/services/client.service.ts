@@ -5,17 +5,17 @@ import { Client } from 'src/app/shared/models/client';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ClientService {
   url = `${environment.apiUrl}users`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getClient(): Observable<Client[]> {
     return this.http.get<Client[]>(this.url);
   }
- 
+
   getClientByID(id: number): Observable<Client> {
     const urlByID = `${this.url}/${id}/`;
     return this.http.get<Client>(urlByID);

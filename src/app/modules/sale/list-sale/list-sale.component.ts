@@ -9,7 +9,7 @@ import { SaleService } from '../services/sale.service';
 @Component({
   selector: 'app-list-sale',
   templateUrl: './list-sale.component.html',
-  styleUrls: ['./list-sale.component.scss']
+  styleUrls: ['./list-sale.component.scss'],
 })
 export class ListSaleComponent implements OnInit {
   subcription: Subscription = new Subscription();
@@ -18,7 +18,7 @@ export class ListSaleComponent implements OnInit {
   pageIndex = 0;
   pageSize = 5;
   length = 0;
-  columsProps: {head: string, data: string}[] = [
+  columsProps: { head: string; data: string }[] = [
     {
       head: 'ID',
       data: 'idVenta',
@@ -33,25 +33,28 @@ export class ListSaleComponent implements OnInit {
     },
   ];
 
-  constructor(private saleService: SaleService) { }
+  constructor(private saleService: SaleService) {}
 
   ngOnInit() {
     this.loadData();
   }
-  
+
   loadData() {
     this.loading = true;
-    const sub$ = this.saleService.getSale().pipe(
-      map((sale: Sale[]) => {
-        this.dataSource.data = sale;
-        this.length = sale.length;
-        this.loading = false;
-      }),
-      catchError(() => {
-        this.loading = false;
-        return of(null);
-      })
-    ).subscribe();
+    const sub$ = this.saleService
+      .getSale()
+      .pipe(
+        map((sale: Sale[]) => {
+          this.dataSource.data = sale;
+          this.length = sale.length;
+          this.loading = false;
+        }),
+        catchError(() => {
+          this.loading = false;
+          return of(null);
+        })
+      )
+      .subscribe();
     this.subcription.add(sub$);
   }
 

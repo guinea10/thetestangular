@@ -5,17 +5,17 @@ import { Product } from 'src/app/shared/models/product';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductService {
   url = `${environment.apiUrl}products`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getProduct(): Observable<Product[]> {
     return this.http.get<Product[]>(this.url);
   }
- 
+
   getProductByID(id: number): Observable<Product> {
     const urlByID = `${this.url}/${id}/`;
     return this.http.get<Product>(urlByID);

@@ -1,5 +1,10 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { of, Subscription } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
@@ -10,7 +15,7 @@ import { ProductService } from '../services/product.service';
 @Component({
   selector: 'app-add-edit-product',
   templateUrl: './add-edit-product.component.html',
-  styleUrls: ['./add-edit-product.component.scss']
+  styleUrls: ['./add-edit-product.component.scss'],
 })
 export class AddEditProductComponent implements OnInit, OnDestroy {
   subcription: Subscription = new Subscription();
@@ -32,17 +37,14 @@ export class AddEditProductComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-   this.subcription.unsubscribe(); 
+    this.subcription.unsubscribe();
   }
 
   createForm() {
     this.portada = !!this.values ? 'Editar Productos' : 'Adicionar Productos';
     this.formGroup = this.formBuilder.group({
       idProducto: [this.values ? this.values.idProducto : null],
-      nombre: [
-        this.values ? this.values.nombre : '',
-        Validators.required,
-      ],
+      nombre: [this.values ? this.values.nombre : '', Validators.required],
       precio: [
         this.values ? this.values.precio : '',
         [Validators.required, Validation.isNumberDecimal],

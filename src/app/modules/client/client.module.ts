@@ -5,16 +5,9 @@ import { AddEditClientComponent } from './add-edit-client/add-edit-client.compon
 import { SharedModule } from 'src/app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-
-
 @NgModule({
   declarations: [ListClientComponent, AddEditClientComponent],
   entryComponents: [AddEditClientComponent],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    SharedModule,
-  ]
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, SharedModule],
 })
-export class ClientModule { }
+export class ClientModule {}

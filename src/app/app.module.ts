@@ -18,9 +18,7 @@ import { AuthenticationModule } from './modules/authentication/authentication.mo
 import { ROOT_REDUCERS } from './state/app.state';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -35,11 +33,13 @@ import { ROOT_REDUCERS } from './state/app.state';
     AuthenticationModule,
     SharedModule,
   ],
-  providers: [{
-    provide: HTTP_INTERCEPTORS,
-    useClass: InterceptorService,
-    multi: true
-  }],
-  bootstrap: [AppComponent]
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: InterceptorService,
+      multi: true,
+    },
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

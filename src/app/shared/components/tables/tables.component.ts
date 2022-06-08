@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'app-tables',
   templateUrl: './tables.component.html',
-  styleUrls: ['./tables.component.scss']
+  styleUrls: ['./tables.component.scss'],
 })
 export class TablesComponent implements OnInit {
   @Output() valueResponse: EventEmitter<any> = new EventEmitter();
@@ -23,7 +23,7 @@ export class TablesComponent implements OnInit {
   modoRedux: Observable<boolean> = new Observable();
   displayedColumnsTemporal!: any[];
 
-  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
 
   constructor() {}
 

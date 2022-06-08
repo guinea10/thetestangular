@@ -8,10 +8,7 @@ import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
-  declarations: [
-    TablesComponent,
-    SidebarComponent,
-  ],
+  declarations: [TablesComponent, SidebarComponent],
   imports: [
     CommonModule,
     AngularMaterialModule,
@@ -20,9 +17,6 @@ import { HttpClientModule } from '@angular/common/http';
     RouterModule,
     HttpClientModule,
   ],
-  exports: [
-    TablesComponent,
-    SidebarComponent,
-  ],
+  exports: [TablesComponent, SidebarComponent],
 })
-export class SharedModule { }
+export class SharedModule {}

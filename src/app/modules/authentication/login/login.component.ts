@@ -8,11 +8,15 @@ import { AppState } from 'src/app/state/app.state';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
   formGroup!: FormGroup;
-  constructor(private route: Router, private store: Store<AppState>, private formBuilder: FormBuilder) { }
+  constructor(
+    private route: Router,
+    private store: Store<AppState>,
+    private formBuilder: FormBuilder
+  ) {}
 
   ngOnInit() {
     this.createForm();
@@ -20,14 +24,8 @@ export class LoginComponent implements OnInit {
 
   createForm() {
     this.formGroup = this.formBuilder.group({
-      username: [
-        'admin',
-        Validators.required,
-      ],
-      password: [
-        '',
-        Validators.required,
-      ],
+      username: ['admin', Validators.required],
+      password: ['', Validators.required],
     });
   }
 
@@ -36,20 +34,18 @@ export class LoginComponent implements OnInit {
       loadUser({
         data: {
           user,
-          typeUser: user === 'admin' ? 'admin' : 'client' 
+          typeUser: user === 'admin' ? 'admin' : 'client',
         },
       })
     );
   }
 
   enter() {
-   if(this.formGroup.errors === null) {
-     const user = this.formGroup.get('username').value;
-     this.actionsLogin(user);
-     if(user === 'admin')
-     this.route.navigate(['admin/users']);
-     else
-     this.route.navigate(['client/sale']);
-   }
+    if (this.formGroup.errors === null) {
+      const user = this.formGroup.get('username').value;
+      this.actionsLogin(user);
+      if (user === 'admin') this.route.navigate(['admin/users']);
+      else this.route.navigate(['client/sale']);
+    }
   }
 }

@@ -5,7 +5,7 @@ import { ClientGuard } from './client.guard';
 describe('ClientGuard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ClientGuard]
+      providers: [ClientGuard],
     });
   });
 

@@ -1,5 +1,5 @@
-import {  createReducer, on } from "@ngrx/store";
-import { clickMenu, loadUser } from "../actions/actions";
+import { createReducer, on } from '@ngrx/store';
+import { clickMenu, loadUser } from '../actions/actions';
 
 export interface userInformation {
   user: string;
@@ -8,8 +8,8 @@ export interface userInformation {
 }
 
 export const initialState: userInformation = {
-  user: "",
-  typeUser: "",
+  user: '',
+  typeUser: '',
   menu: true,
 };
 
@@ -19,7 +19,7 @@ export const Reducer = createReducer(
     const { user, typeUser } = data;
     return { ...state, user, typeUser };
   }),
-  on(clickMenu, (state) => {
+  on(clickMenu, state => {
     return { ...state, menu: !state.menu };
   })
 );

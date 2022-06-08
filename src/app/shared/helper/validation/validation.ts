@@ -1,6 +1,5 @@
 import { AbstractControl } from '@angular/forms';
 export class Validation {
-
   static isNumberInteager(control: AbstractControl) {
     const value = control.value;
     const num = '0123456789';
@@ -20,7 +19,7 @@ export class Validation {
   static isNumberInteagerFirstZero(control: AbstractControl) {
     const value = control.value;
     const num = '0123456789';
-    if(value.length >= 2 && value[0] === '0')
+    if (value.length >= 2 && value[0] === '0')
       return { isNumberInteagerFirstZero: true };
     if (value != null && value !== '') {
       for (let i = 0; i < value.length; i++) {
